@@ -108,7 +108,7 @@ export default function RegistrationForm() {
           (async () => {
             setStep("verifying"); setIsLoading(true);
             const v = await verifyPaymentAndConfirm(response.reference, result.registrationId!);
-            if (v.success) { router.push(`/success?name=${encodeURIComponent(form.fullName)}`); }
+            if (v.success) { router.push(`/success?name=${encodeURIComponent(form.fullName)}&id=${result.registrationId}`); }
             else { setError(v.error ?? "Verification failed."); setStep("form"); setIsLoading(false); }
           })();
         },

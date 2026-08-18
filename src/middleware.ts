@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  // Allow access to the login page
-  if (request.nextUrl.pathname === "/admin/login") {
+  // Allow access to the login page and public invoices
+  if (
+    request.nextUrl.pathname === "/admin/login" || 
+    request.nextUrl.pathname.startsWith("/admin/invoice/")
+  ) {
     return NextResponse.next();
   }
 
