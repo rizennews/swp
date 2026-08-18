@@ -19,13 +19,7 @@ export default function HeroSection() {
       <div className="max-w-5xl mx-auto px-8 pt-32 pb-16">
         <motion.div variants={container} initial="hidden" animate="visible" className="flex flex-col">
 
-          {/* Urgency badge */}
-          <motion.div variants={item} className="mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#2e2e3e] text-xs text-[#8b8b9e]">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-              Registration open · Only 20 spots available
-            </div>
-          </motion.div>
+
 
           {/* Headline */}
           <motion.h1
