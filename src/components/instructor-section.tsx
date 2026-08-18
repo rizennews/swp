@@ -13,10 +13,10 @@ function InstagramIcon({ className }: { className?: string }) {
 }
 
 const instructors = [
-  { id: 1, name: "Instructor Name", instagram: "@handle", instagramUrl: "https://instagram.com/handle", image: "/instructors/instructor-1.jpg" },
-  { id: 2, name: "Instructor Name", instagram: "@handle", instagramUrl: "https://instagram.com/handle", image: "/instructors/instructor-2.jpg" },
-  { id: 3, name: "Instructor Name", instagram: "@handle", instagramUrl: "https://instagram.com/handle", image: "/instructors/instructor-3.jpg" },
-  { id: 4, name: "Instructor Name", instagram: "@handle", instagramUrl: "https://instagram.com/handle", image: "/instructors/instructor-4.jpg" },
+  { id: 1, name: "Stardom", role: "Host", instagram: "@stardom", instagramUrl: "https://instagram.com/stardom", image: "/instructors/instructor-1.jpg" },
+  { id: 2, name: "Drill", role: "Host", instagram: "@drill", instagramUrl: "https://instagram.com/drill", image: "/instructors/instructor-2.jpg" },
+  { id: 3, name: "Guest Instructor", role: "Guest Facilitator", instagram: "@guest", instagramUrl: "https://instagram.com/guest", image: "/instructors/instructor-3.jpg" },
+  { id: 4, name: "Guest Instructor", role: "Guest Facilitator", instagram: "@guest", instagramUrl: "https://instagram.com/guest", image: "/instructors/instructor-4.jpg" },
 ];
 
 function InstructorCard({ instructor, index }: { instructor: typeof instructors[0]; index: number }) {
@@ -48,7 +48,8 @@ function InstructorCard({ instructor, index }: { instructor: typeof instructors[
           </div>
         )}
       </div>
-      <p className="text-white text-sm font-semibold mb-1">{instructor.name}</p>
+      <p className="text-white text-sm font-semibold">{instructor.name}</p>
+      <p className="text-[#8b8b9e] text-xs mb-1.5">{instructor.role}</p>
       <a href={instructor.instagramUrl} target="_blank" rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 text-[#8b8b9e] hover:text-white transition-colors text-xs">
         <InstagramIcon className="w-3.5 h-3.5" />
