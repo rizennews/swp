@@ -66,7 +66,7 @@ export default function AboutSection() {
           It slides up and fades out before the cards even arrive.
         */}
         <motion.div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl px-6 text-center z-10 flex flex-col gap-6"
+          className="absolute top-[15%] md:top-[20%] left-1/2 -translate-x-1/2 w-full max-w-3xl px-6 text-center z-10 flex flex-col gap-6"
           style={{ y: textY, opacity: textOpacity }}
         >
           <h2
