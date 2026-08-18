@@ -64,7 +64,7 @@ export function RemoveRegistrationButton({ id }: { id: string }) {
             Choose an action below. You can either issue a full refund via Paystack and delete the user, or just delete the user's record from the database without refunding.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="border-none bg-transparent sm:justify-end gap-2 p-0 mt-6">
+        <DialogFooter className="border-none bg-transparent sm:justify-end gap-3 pt-6 pb-2 m-0">
           <DialogClose
             render={
               <Button
