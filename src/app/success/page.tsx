@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
+import { db } from "@/db";
+import { registrations } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 
 export const metadata = {
   title: "Registration Confirmed — Shoot With Purpose",
@@ -13,6 +16,19 @@ interface Props {
 export default async function SuccessPage({ searchParams }: Props) {
   const { name, id } = await searchParams;
   const firstName = name ? name.split(" ")[0] : "Photographer";
+
+  let actualId = id;
+
+  // Fallback: If ID is not in the URL, try to find their most recent registration by name
+  if (!actualId && name) {
+    const recentReg = await db.query.registrations.findFirst({
+      where: eq(registrations.fullName, name),
+      orderBy: [desc(registrations.createdAt)],
+    });
+    if (recentReg) {
+      actualId = recentReg.id;
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6">
@@ -73,8 +89,8 @@ export default async function SuccessPage({ searchParams }: Props) {
             </Button>
           </a>
 
-          {id && (
-            <Link href={`/admin/invoice/${id}`} target="_blank">
+          {actualId && (
+            <Link href={`/admin/invoice/${actualId}`} target="_blank">
               <Button className="bg-amber-500 hover:bg-amber-400 text-black font-bold h-11 px-6 rounded w-full sm:w-auto">
                 Print Invoice
                 <ArrowRight className="ml-2 w-4 h-4" />
