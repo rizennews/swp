@@ -88,7 +88,7 @@ export default function RegistrationForm() {
       setIsLoading(false);
 
       const ref = `SWP-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-      const amountToPay = result.remainingAmount ? result.remainingAmount * 100 : 200 * 100;
+      const amountToPay = result.remainingAmount ? result.remainingAmount * 100 : 5 * 100;
 
       window.PaystackPop.setup({
         key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
@@ -177,7 +177,7 @@ export default function RegistrationForm() {
           <p className="text-white text-sm font-semibold">Registration fee</p>
           <p className="text-[#4a4a5a] text-xs mt-0.5">Secure checkout via Paystack</p>
         </div>
-        <span className="text-white font-bold text-xl">GHS 200</span>
+        <span className="text-white font-bold text-xl">GHS 5</span>
       </div>
 
       {error && (
@@ -188,11 +188,10 @@ export default function RegistrationForm() {
         className="w-full inline-flex items-center justify-center gap-2 h-10 rounded-full bg-white hover:bg-zinc-100 text-black font-semibold text-sm transition-colors disabled:opacity-40">
         {isLoading
           ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />{step === "verifying" ? "Verifying…" : "Processing…"}</>
-          : <>Register & pay GHS 200 <ArrowRight className="w-3.5 h-3.5" /></>}
+          : <>Register & pay GHS 5 <ArrowRight className="w-3.5 h-3.5" /></>}
       </button>
 
 
     </form>
   );
 }
-

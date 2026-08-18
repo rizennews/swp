@@ -45,7 +45,7 @@ export async function POST(req: Request) {
          return NextResponse.json({ received: true, note: "No registration_id found in metadata" });
       }
 
-      const isFullPayment = amountPaidGhs >= 200;
+      const isFullPayment = amountPaidGhs >= 5;
 
       await db.update(registrations)
         .set({

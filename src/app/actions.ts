@@ -37,7 +37,7 @@ export async function createRegistration(data: RegistrationData) {
         goal: data.goal,
       }).where(eq(registrations.id, existing.id));
 
-      const remainingAmount = 200 - (existing.amountPaid || 0);
+      const remainingAmount = 5 - (existing.amountPaid || 0);
       return { 
         success: true, 
         registrationId: existing.id,
@@ -74,7 +74,7 @@ export async function verifyPaymentAndConfirm(reference: string, registrationId:
       });
 
       const newTotal = (currentReg?.amountPaid || 0) + amountPaidGhs;
-      const isFullPayment = newTotal >= 200;
+      const isFullPayment = newTotal >= 5;
 
       await db.update(registrations)
         .set({
@@ -171,7 +171,7 @@ export async function syncPaymentStatus(registrationId: string, email: string) {
 
     if (successfulTransaction) {
       const amountPaidGhs = successfulTransaction.amount / 100;
-      const isFullPayment = amountPaidGhs >= 200;
+      const isFullPayment = amountPaidGhs >= 5;
 
       await db.update(registrations)
         .set({
