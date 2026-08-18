@@ -96,7 +96,12 @@ export default function RegistrationForm() {
         amount: amountToPay,
         currency: "GHS",
         ref,
-        metadata: { custom_fields: [{ display_name: "Name", variable_name: "full_name", value: form.fullName }] },
+        metadata: { 
+          custom_fields: [
+            { display_name: "Name", variable_name: "full_name", value: form.fullName },
+            { display_name: "Registration ID", variable_name: "registration_id", value: result.registrationId! }
+          ] 
+        },
         onClose: function() { setStep("form"); setError("Payment cancelled. Your details are saved — try again."); },
         callback: function(response: any) {
           (async () => {

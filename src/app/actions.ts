@@ -146,7 +146,11 @@ export async function syncPaymentStatus(registrationId: string, email: string) {
     const data = await res.json();
     if (!data.status) return { success: false, error: "Failed to fetch from Paystack" };
 
-    const successfulTransaction = data.data.find((tx: any) => tx.status === "success");
+    const successfulTransaction = data.data.find((tx: any) => {
+      if (tx.status !== "success") return false;
+      const metaRegId = tx.metadata?.custom_fields?.find((f: any) => f.variable_name === "registration_id")?.value;
+      return metaRegId === registrationId;
+    });
 
     if (successfulTransaction) {
       const amountPaidGhs = successfulTransaction.amount / 100;
