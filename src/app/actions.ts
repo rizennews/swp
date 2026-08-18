@@ -183,3 +183,53 @@ export async function syncPaymentStatus(registrationId: string, email: string) {
     return { success: false, error: "Could not sync payment status." };
   }
 }
+
+export async function reconcileFinances() {
+  try {
+    const allRegs = await db.query.registrations.findMany();
+    let fixedCount = 0;
+
+    for (const reg of allRegs) {
+      if (!reg.paystackReference || reg.paymentStatus === "pending") continue;
+
+      try {
+        const res = await fetch(`https://api.paystack.co/transaction/verify/${reg.paystackReference}`, {
+          headers: {
+            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          },
+        });
+        const data = await res.json();
+        
+        if (!data.status) continue; // Skip if Paystack errors on this ref
+
+        const tx = data.data;
+        const metaRegId = tx.metadata?.custom_fields?.find((f: any) => f.variable_name === "registration_id")?.value;
+
+        // If the transaction's metadata doesn't match this registration (or is missing), it's a false sync!
+        // We revert the registration to pending.
+        if (metaRegId !== reg.id) {
+          await db.update(registrations)
+            .set({ paymentStatus: "pending", paystackReference: null, amountPaid: 0 })
+            .where(eq(registrations.id, reg.id));
+          fixedCount++;
+          continue;
+        }
+
+        // If it matches, check if it was refunded in Paystack
+        if (tx.status === "reversed" || tx.status === "failed") {
+          await db.update(registrations)
+            .set({ paymentStatus: "pending", paystackReference: null, amountPaid: 0 })
+            .where(eq(registrations.id, reg.id));
+          fixedCount++;
+        }
+      } catch (err) {
+        console.error("Error verifying ref", reg.paystackReference, err);
+      }
+    }
+
+    revalidatePath("/admin");
+    return { success: true, message: `Reconciliation complete. Fixed ${fixedCount} inaccurate records.` };
+  } catch (error) {
+    return { success: false, error: "Failed to reconcile finances." };
+  }
+}

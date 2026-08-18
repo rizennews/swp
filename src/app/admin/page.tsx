@@ -1,6 +1,7 @@
 import { getAllRegistrations } from "@/app/actions";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ExportButton } from "@/components/export-button";
+import { ReconcileFinancesButton } from "@/components/reconcile-finances-button";
 import { LogoutButton } from "@/components/logout-button";
 import { RemoveRegistrationButton } from "@/components/remove-registration-button";
 import { SyncPaymentButton } from "@/components/sync-payment-button";
@@ -66,6 +67,7 @@ export default async function AdminDashboard() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-medium text-white">All Registrations</h2>
+            <ReconcileFinancesButton />
           </div>
 
           {registrations.length === 0 ? (
