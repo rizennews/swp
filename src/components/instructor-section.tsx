@@ -13,9 +13,9 @@ function InstagramIcon({ className }: { className?: string }) {
 }
 
 const instructors = [
-  { id: 1, name: "Stardom", role: "Host", instagram: "@stardom", instagramUrl: "https://instagram.com/stardom", image: "/instructors/Stardom Photos.jpeg" },
-  { id: 2, name: "Drill", role: "Host", instagram: "@drill", instagramUrl: "https://instagram.com/drill", image: "/instructors/Drill Visus.jpeg" },
-  { id: 3, name: "Kirk Studios", role: "Guest Facilitator", instagram: "@kirkstudios", instagramUrl: "https://instagram.com/kirkstudios", image: "/instructors/Kirk Studios.jpeg" },
+  { id: 1, name: "Stardom", role: "Host", instagram: "@stardom_photos", instagramUrl: "https://instagram.com/stardom_photos", image: "/instructors/Stardom Photos.jpeg" },
+  { id: 2, name: "Drill", role: "Host", instagram: "@drill_visus", instagramUrl: "https://instagram.com/drill_visus", image: "/instructors/Drill Visus.jpeg" },
+  { id: 3, name: "Kirk Studios", role: "Guest Facilitator", instagram: "@kirkstudio", instagramUrl: "https://instagram.com/kirkstudio", image: "/instructors/Kirk Studios.jpeg" },
   { id: 4, name: "Serwah Photography", role: "Guest Facilitator", instagram: "@serwahphotography", instagramUrl: "https://instagram.com/serwahphotography", image: "/instructors/Serwah Photography.jpeg" },
 ];
 
