@@ -136,7 +136,7 @@ export default function RegistrationForm() {
       <Section title="Photography background">
         <div className="grid sm:grid-cols-2 gap-4 mb-4">
           <div><FieldLabel>Camera type</FieldLabel>
-            <Select onValueChange={(v: string) => handleChange("cameraType", v)}>
+            <Select onValueChange={(v) => handleChange("cameraType", v as string)}>
               <SelectTrigger id="cameraType" className={selectCls}><SelectValue placeholder="Select…" /></SelectTrigger>
               <SelectContent className="bg-[#13131e] border-[#1e1e2e]">
                 {["DSLR", "Mirrorless", "Smartphone", "Compact", "Other"].map((c) => (
@@ -146,7 +146,7 @@ export default function RegistrationForm() {
             </Select>
           </div>
           <div><FieldLabel>Experience level</FieldLabel>
-            <Select onValueChange={(v: string) => handleChange("experienceLevel", v)}>
+            <Select onValueChange={(v) => handleChange("experienceLevel", v as string)}>
               <SelectTrigger id="experienceLevel" className={selectCls}><SelectValue placeholder="Select…" /></SelectTrigger>
               <SelectContent className="bg-[#13131e] border-[#1e1e2e]">
                 {[["beginner", "Beginner (0–1 yr)"], ["intermediate", "Intermediate (1–3 yrs)"], ["advanced", "Advanced (3+ yrs)"], ["professional", "Professional"]].map(([v, l]) => (

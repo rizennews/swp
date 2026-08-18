@@ -10,7 +10,7 @@ const container = {
 };
 const item = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" as any } },
 };
 
 export default function HeroSection() {
