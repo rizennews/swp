@@ -134,3 +134,38 @@ export async function rejectAndRefundRegistration(id: string) {
     return { success: false, error: "An unexpected error occurred while refunding." };
   }
 }
+
+export async function syncPaymentStatus(registrationId: string, email: string) {
+  try {
+    const res = await fetch(`https://api.paystack.co/transaction?email=${email}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+      },
+    });
+
+    const data = await res.json();
+    if (!data.status) return { success: false, error: "Failed to fetch from Paystack" };
+
+    const successfulTransaction = data.data.find((tx: any) => tx.status === "success");
+
+    if (successfulTransaction) {
+      const amountPaidGhs = successfulTransaction.amount / 100;
+      const isFullPayment = amountPaidGhs >= 200;
+
+      await db.update(registrations)
+        .set({
+          paymentStatus: isFullPayment ? "paid" : "partial",
+          paystackReference: successfulTransaction.reference,
+          amountPaid: amountPaidGhs,
+        })
+        .where(eq(registrations.id, registrationId));
+
+      revalidatePath("/admin");
+      return { success: true, message: "Payment found and synced!" };
+    }
+
+    return { success: false, error: "No successful payment found on Paystack for this email." };
+  } catch {
+    return { success: false, error: "Could not sync payment status." };
+  }
+}

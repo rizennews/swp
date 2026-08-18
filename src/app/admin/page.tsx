@@ -3,6 +3,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { ExportButton } from "@/components/export-button";
 import { LogoutButton } from "@/components/logout-button";
 import { RemoveRegistrationButton } from "@/components/remove-registration-button";
+import { SyncPaymentButton } from "@/components/sync-payment-button";
 import {
   Table,
   TableBody,
@@ -124,7 +125,10 @@ export default async function AdminDashboard() {
                           year: "numeric",
                         })}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right flex items-center justify-end gap-2">
+                        {reg.paymentStatus === "pending" && (
+                          <SyncPaymentButton id={reg.id} email={reg.email} />
+                        )}
                         <RemoveRegistrationButton id={reg.id} />
                       </TableCell>
                     </TableRow>
