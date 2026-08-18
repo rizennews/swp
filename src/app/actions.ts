@@ -135,6 +135,16 @@ export async function rejectAndRefundRegistration(id: string) {
   }
 }
 
+export async function deleteRegistration(id: string) {
+  try {
+    await db.delete(registrations).where(eq(registrations.id, id));
+    revalidatePath("/admin");
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Failed to delete registration." };
+  }
+}
+
 export async function syncPaymentStatus(registrationId: string, email: string) {
   try {
     const res = await fetch(`https://api.paystack.co/transaction?email=${email}`, {

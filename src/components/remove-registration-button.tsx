@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { rejectAndRefundRegistration } from "@/app/actions";
+import { rejectAndRefundRegistration, deleteRegistration } from "@/app/actions";
 import { Loader2, Trash2 } from "lucide-react";
 import {
   Dialog,
@@ -17,9 +17,10 @@ import { Button } from "@/components/ui/button";
 
 export function RemoveRegistrationButton({ id }: { id: string }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleRemove = async () => {
+  const handleRefundAndDelete = async () => {
     setIsLoading(true);
     const result = await rejectAndRefundRegistration(id);
     
@@ -31,12 +32,24 @@ export function RemoveRegistrationButton({ id }: { id: string }) {
     }
   };
 
+  const handleDeleteOnly = async () => {
+    setIsDeleting(true);
+    const result = await deleteRegistration(id);
+    
+    if (!result.success) {
+      alert(result.error || "Failed to delete.");
+      setIsDeleting(false);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
         render={
           <button
-            title="Reject & Refund"
+            title="Reject & Remove"
             className="p-1.5 text-[#8b8b9e] hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
           />
         }
@@ -44,19 +57,19 @@ export function RemoveRegistrationButton({ id }: { id: string }) {
         <Trash2 className="w-4 h-4" />
       </DialogTrigger>
       
-      <DialogContent className="bg-[#13131e] border-[#1e1e2e]">
+      <DialogContent className="bg-[#13131e] border-[#1e1e2e] pb-6">
         <DialogHeader>
           <DialogTitle className="text-white">Reject Registration</DialogTitle>
           <DialogDescription className="text-[#8b8b9e]">
-            Are you sure you want to reject this registration and issue a full refund via Paystack? This action is irreversible.
+            Choose an action below. You can either issue a full refund via Paystack and delete the user, or just delete the user's record from the database without refunding.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="border-none bg-transparent sm:justify-end gap-2 p-0 mt-4">
+        <DialogFooter className="border-none bg-transparent sm:justify-end gap-2 p-0 mt-6">
           <DialogClose
             render={
               <Button
                 variant="outline"
-                disabled={isLoading}
+                disabled={isLoading || isDeleting}
                 className="border-[#1e1e2e] bg-transparent text-white hover:bg-[#1e1e2e]"
               />
             }
@@ -64,12 +77,20 @@ export function RemoveRegistrationButton({ id }: { id: string }) {
             Cancel
           </DialogClose>
           <Button
-            onClick={handleRemove}
-            disabled={isLoading}
+            onClick={handleDeleteOnly}
+            disabled={isLoading || isDeleting}
+            className="bg-zinc-800 hover:bg-zinc-700 text-white border-none"
+          >
+            {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Just Delete
+          </Button>
+          <Button
+            onClick={handleRefundAndDelete}
+            disabled={isLoading || isDeleting}
             className="bg-red-500 hover:bg-red-600 text-white border-none"
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Yes, Refund & Delete
+            Refund & Delete
           </Button>
         </DialogFooter>
       </DialogContent>
