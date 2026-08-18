@@ -10,10 +10,7 @@ export default function Footer() {
         <p className="text-[#3a3a4a] text-xs">
           © {new Date().getFullYear()} ShootWithPurpose · Accra, Ghana
         </p>
-        <a href="mailto:hello@shootwithpurpose.com"
-          className="text-[#3a3a4a] hover:text-[#8b8b9e] text-xs transition-colors">
-          hello@shootwithpurpose.com
-        </a>
+
       </div>
     </footer>
   );
