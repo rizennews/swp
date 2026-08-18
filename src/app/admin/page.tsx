@@ -33,13 +33,13 @@ export default async function AdminDashboard() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] font-sans">
       {/* Top bar */}
-      <div className="border-b border-[#1e1e2e] bg-[#0a0a0a] px-8 py-5 flex items-center justify-between">
+      <div className="border-b border-[#1e1e2e] bg-[#0a0a0a] px-4 md:px-8 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
         <div>
           <h1 className="text-lg font-medium text-white tracking-tight">Admin Dashboard</h1>
           <p className="text-[#8b8b9e] text-xs mt-0.5">Shoot With Purpose</p>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 border-r border-[#1e1e2e] pr-6">
+        <div className="flex flex-wrap items-center gap-4 md:gap-6">
+          <div className="flex items-center gap-2 border-r border-[#1e1e2e] pr-4 md:pr-6">
             <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
             <span className="text-[#8b8b9e] text-xs">Live</span>
           </div>
@@ -48,7 +48,7 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
         {/* Simple Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           <div className="bg-[#111118] border border-[#1e1e2e] rounded-xl p-6">
