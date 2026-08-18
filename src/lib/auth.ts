@@ -19,7 +19,7 @@ export const auth = betterAuth({
   },
   plugins: [admin()],
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: process.env.BETTER_AUTH_URL || "https://swp-blue.vercel.app",
   trustHost: true,
 });
 

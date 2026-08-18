@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_APP_URL, // Will use current origin if undefined
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || "https://swp-blue.vercel.app",
 });
 
 export const { signIn, signUp, signOut, useSession } = authClient;
