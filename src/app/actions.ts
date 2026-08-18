@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from "next/cache";
+
 import { db } from "@/db";
 import { registrations } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -95,4 +97,40 @@ export async function getAllRegistrations() {
   return db.query.registrations.findMany({
     orderBy: (registrations, { desc }) => [desc(registrations.createdAt)],
   });
+}
+
+export async function rejectAndRefundRegistration(id: string) {
+  try {
+    const reg = await db.query.registrations.findFirst({
+      where: eq(registrations.id, id),
+    });
+
+    if (!reg) return { success: false, error: "Registration not found." };
+
+    if (reg.paystackReference && reg.paymentStatus !== "pending") {
+      const refundRes = await fetch("https://api.paystack.co/refund", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          transaction: reg.paystackReference,
+        }),
+      });
+
+      const refundData = await refundRes.json();
+      
+      if (!refundRes.ok && !refundData.message?.toLowerCase().includes("refunded")) {
+         return { success: false, error: refundData.message || "Failed to issue refund." };
+      }
+    }
+
+    await db.delete(registrations).where(eq(registrations.id, id));
+    revalidatePath("/admin");
+    
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "An unexpected error occurred while refunding." };
+  }
 }

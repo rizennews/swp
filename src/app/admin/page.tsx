@@ -2,6 +2,7 @@ import { getAllRegistrations } from "@/app/actions";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ExportButton } from "@/components/export-button";
 import { LogoutButton } from "@/components/logout-button";
+import { RemoveRegistrationButton } from "@/components/remove-registration-button";
 import {
   Table,
   TableBody,
@@ -84,6 +85,7 @@ export default async function AdminDashboard() {
                     <TableHead className="text-[#8b8b9e] text-xs font-normal">Status</TableHead>
                     <TableHead className="text-[#8b8b9e] text-xs font-normal">Paid (GHS)</TableHead>
                     <TableHead className="text-[#8b8b9e] text-xs font-normal">Date</TableHead>
+                    <TableHead className="text-[#8b8b9e] text-xs font-normal text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -121,6 +123,9 @@ export default async function AdminDashboard() {
                           month: "short",
                           year: "numeric",
                         })}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <RemoveRegistrationButton id={reg.id} />
                       </TableCell>
                     </TableRow>
                   ))}
