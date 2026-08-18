@@ -21,7 +21,7 @@ const pillars = [
     fig: "03",
     title: "You'll leave with a real portfolio.",
     description:
-      "Three days of shooting, editing, and critique. You'll walk away with work you're proud to show — and the skills to keep growing.",
+      "Two days of shooting, editing, and critique. You'll walk away with work you're proud to show — and the skills to keep growing.",
     rotation: -1,
   },
   {
@@ -73,7 +73,7 @@ export default function AboutSection() {
             className="text-[#8b8b9e] text-sm md:text-xl leading-relaxed"
             style={{ fontFamily: "'Satoshi', sans-serif" }}
           >
-            This masterclass fixes that. We’ve distilled years of professional experience into three intensive days. No fluff, just the exact techniques, mindset, and business strategies you need to elevate your craft and start shooting with true purpose.
+            This masterclass fixes that. We’ve distilled years of professional experience into two intensive days. No fluff, just the exact techniques, mindset, and business strategies you need to elevate your craft and start shooting with true purpose.
           </p>
         </div>
 

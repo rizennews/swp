@@ -4,12 +4,12 @@ import { ArrowRight } from "lucide-react";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 
 const included = [
-  "3 days of hands-on training",
+  "2 days of hands-on training",
   "4 professional photographers as instructors",
   "Field sessions in Accra",
   "Lightroom editing workshop",
   "Certificate of completion",
-  "Lunch + course materials included",
+  "Course materials included",
 ];
 
 export default function CtaSection() {

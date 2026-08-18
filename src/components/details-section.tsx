@@ -30,11 +30,11 @@ export default function DetailsSection() {
           {/* Right Column: Simple Text List */}
           <FadeUp delay={0.1}>
             <div className="border-t border-[#1e1e2e]">
-              <InfoRow label="Date" value="August 22 — 24, 2025" />
+              <InfoRow label="Date" value="August 21 — 22, 2025" />
               <InfoRow label="Time" value="9:00 AM — 5:00 PM daily" />
               <InfoRow label="Location" value="Accra, Ghana (venue TBA)" />
               <InfoRow label="Class size" value="Maximum 20 participants" />
-              <InfoRow label="Included" value="Notes, certificate, lunch daily" />
+              <InfoRow label="Included" value="Notes, certificate" />
               <InfoRow label="Investment" value="GHS 200" isHighlight />
             </div>
           </FadeUp>

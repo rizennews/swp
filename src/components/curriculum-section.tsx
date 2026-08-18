@@ -5,38 +5,24 @@ import { FadeUp, StaggerContainer } from "@/components/ui/animations";
 const days = [
   {
     fig: "Day 01",
-    title: "Foundation & Vision",
-    date: "August 22, 2025",
+    title: "Foundation & Field Session",
+    date: "August 21, 2025",
     topics: [
-      "Understanding your camera's full potential",
-      "Exposure triangle — aperture, shutter, ISO",
-      "Reading light: natural, golden hour, harsh light",
+      "Exposure triangle & reading natural light",
       "Composition rules and when to break them",
-      "The mindset of a purposeful photographer",
+      "Field session: Street photography in Accra",
+      "Approaching subjects & framing stories",
     ],
   },
   {
     fig: "Day 02",
-    title: "Street & Storytelling",
-    date: "August 23, 2025",
-    topics: [
-      "Field session: Street photography in Accra",
-      "Approaching subjects — ethics & confidence",
-      "Framing a story in a single frame",
-      "Environmental portraits & candid photography",
-      "Group critique and real-time feedback",
-    ],
-  },
-  {
-    fig: "Day 03",
     title: "Post-Processing & Portfolio",
-    date: "August 24, 2025",
+    date: "August 22, 2025",
     topics: [
       "Lightroom editing workflow from scratch",
       "Colour grading and developing a personal style",
       "Building a cohesive photography portfolio",
-      "Printing, social media, and monetising your craft",
-      "Final showcase and certificates",
+      "Group critique and certificates",
     ],
   },
 ];
@@ -51,15 +37,15 @@ export default function CurriculumSection() {
             className="text-[32px] md:text-[44px] font-bold text-white leading-tight mb-6"
             style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
           >
-            Three days. Three chapters.
+            Two days. Intensive training.
           </h2>
           <p className="text-[#8b8b9e] text-lg max-w-2xl mx-auto">
             Each day builds on the last. Walk in as a photographer. Leave as a visual storyteller.
           </p>
         </FadeUp>
 
-        {/* 3-Column Card Layout (Linear Style) */}
-        <StaggerContainer className="grid md:grid-cols-3 gap-8">
+        {/* 2-Column Card Layout (Linear Style) */}
+        <StaggerContainer className="grid md:grid-cols-2 gap-8">
           {days.map((d) => (
             <FadeUp key={d.fig} className="h-full">
               <div className="h-full flex flex-col p-8 rounded-2xl bg-[#111118] border border-[#2e2e3e] hover:border-[#4a4a5a] transition-colors duration-300">

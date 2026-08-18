@@ -32,7 +32,7 @@ export default function HeroSection() {
 
           {/* Subtitle */}
           <motion.p variants={item} className="text-[#8b8b9e] text-base leading-relaxed max-w-xl mb-8">
-            In 3 days, you&apos;ll go from unsure to unstoppable. Learn light, composition, and storytelling
+            In 2 days, you&apos;ll go from unsure to unstoppable. Learn light, composition, and storytelling
             from photographers who have shot across Africa and beyond.{" "}
             <span className="text-white">GHS 200. One time. No fluff.</span>
           </motion.p>
@@ -55,7 +55,7 @@ export default function HeroSection() {
 
           {/* Trust line */}
           <motion.p variants={item} className="text-[#3a3a4a] text-xs">
-            Aug 22–24, 2025 · Accra, Ghana · Certificate included · Lunch daily
+            Aug 21–22, 2025 · Accra, Ghana · Certificate included
           </motion.p>
         </motion.div>
       </div>
@@ -69,7 +69,7 @@ export default function HeroSection() {
       >
         <div className="max-w-5xl mx-auto px-8 py-4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { value: "3 Days", label: "Immersive training" },
+            { value: "2 Days", label: "Immersive training" },
             { value: "4 Instructors", label: "Industry professionals" },
             { value: "20 Spots", label: "Small class, real feedback" },
             { value: "GHS 200", label: "All-inclusive investment" },
