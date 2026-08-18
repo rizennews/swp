@@ -36,34 +36,38 @@ const pillars = [
 export default function AboutSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Track scroll progress for the 400vh container
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  // Calculate slide-up animations for each card based on scroll progress
-  // By making ALL 4 cards slide up from offscreen, they never overlap with the intro text!
-  const y0 = useTransform(scrollYProgress, [0.1, 0.25], ["150vh", "0vh"]);
-  const y1 = useTransform(scrollYProgress, [0.3, 0.45], ["150vh", "0vh"]);
-  const y2 = useTransform(scrollYProgress, [0.5, 0.65], ["150vh", "0vh"]);
-  const y3 = useTransform(scrollYProgress, [0.7, 0.85], ["150vh", "0vh"]);
+  // The text starts in the center, and slides UP out of the screen as you begin scrolling
+  const textY = useTransform(scrollYProgress, [0, 0.15], ["0vh", "-100vh"]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
+
+  // ALL cards now slide up from the bottom of the screen to the center
+  // Card 1 comes up right after the text leaves
+  const y0 = useTransform(scrollYProgress, [0.05, 0.25], ["100vh", "0vh"]);
+  const y1 = useTransform(scrollYProgress, [0.25, 0.45], ["100vh", "0vh"]);
+  const y2 = useTransform(scrollYProgress, [0.5, 0.65], ["100vh", "0vh"]);
+  const y3 = useTransform(scrollYProgress, [0.7, 0.85], ["100vh", "0vh"]);
 
   const ys = [y0, y1, y2, y3];
 
   return (
     <section id="about" ref={containerRef} className="bg-[#0d0d14] relative z-0" style={{ height: "400vh" }}>
       
-      {/* 
-        This sticky wrapper pins to the screen for the entire 400vh scroll.
-        Using 100svh prevents issues with mobile browser address bars.
-      */}
+      {/* Viewport container */}
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
         
-        {/* Intro text - Absolutely centered so it doesn't push cards down */}
+        {/* 
+          INTRO TEXT
+          Absolutely centered so it doesn't take up any layout space.
+          It slides up and fades out before the cards even arrive.
+        */}
         <motion.div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl px-6 text-center z-10 flex flex-col gap-4 md:gap-6"
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.05], [1, 0]) }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl px-6 text-center z-10 flex flex-col gap-6"
+          style={{ y: textY, opacity: textOpacity }}
         >
           <h2
             className="text-[32px] md:text-[42px] font-bold text-white leading-tight"
@@ -79,23 +83,27 @@ export default function AboutSection() {
           </p>
         </motion.div>
 
-        {/* The Cards Stack - Absolutely centered */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl px-4 flex items-center justify-center h-[500px]">
+        {/* 
+          CARDS STACK
+          Absolutely centered. Because the text is also absolutely centered,
+          they don't squish each other or fight for flexbox space.
+          The text leaves, then the cards slide in.
+        */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl px-4 flex items-center justify-center">
           {pillars.map((p, i) => (
             <motion.div
               key={p.fig}
-              className="absolute w-full px-4 md:px-8"
+              className="absolute w-full px-2 md:px-8"
               style={{
                 y: ys[i],
                 zIndex: i,
               }}
             >
-              {/* The Physical Card */}
+              {/* The Physical Card - Removed shadow/glow */}
               <div 
-                className="w-full p-8 md:p-12 bg-[#111118] border border-[#2e2e3e] rounded-xl transition-transform duration-500 ease-out shadow-2xl"
+                className="w-full p-8 md:p-12 bg-[#111118] border border-[#2e2e3e] rounded-xl transition-transform duration-500 ease-out"
                 style={{ transform: `rotate(${p.rotation}deg)` }}
               >
-                {/* Number circle */}
                 <div
                   className="w-12 h-12 md:w-16 md:h-16 bg-[#1a1a24] border border-[#2e2e3e] text-white flex items-center justify-center rounded-full font-bold text-xl md:text-2xl mb-6"
                   style={{ fontFamily: "'Clash Display', sans-serif" }}
@@ -119,6 +127,7 @@ export default function AboutSection() {
             </motion.div>
           ))}
         </div>
+
       </div>
     </section>
   );
