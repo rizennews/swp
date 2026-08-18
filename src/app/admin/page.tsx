@@ -5,6 +5,8 @@ import { ReconcileFinancesButton } from "@/components/reconcile-finances-button"
 import { LogoutButton } from "@/components/logout-button";
 import { RemoveRegistrationButton } from "@/components/remove-registration-button";
 import { SyncPaymentButton } from "@/components/sync-payment-button";
+import Link from "next/link";
+import { FileText } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -128,6 +130,16 @@ export default async function AdminDashboard() {
                         })}
                       </TableCell>
                       <TableCell className="text-right flex items-center justify-end gap-2">
+                        {reg.paymentStatus === "paid" && (
+                          <Link 
+                            href={`/admin/invoice/${reg.id}`}
+                            target="_blank"
+                            title="View Invoice"
+                            className="p-1.5 text-[#8b8b9e] hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                          >
+                            <FileText className="w-4 h-4" />
+                          </Link>
+                        )}
                         {reg.paymentStatus === "pending" && (
                           <SyncPaymentButton id={reg.id} email={reg.email} />
                         )}

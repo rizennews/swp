@@ -99,6 +99,12 @@ export async function getAllRegistrations() {
   });
 }
 
+export async function getRegistrationById(id: string) {
+  return db.query.registrations.findFirst({
+    where: eq(registrations.id, id),
+  });
+}
+
 export async function rejectAndRefundRegistration(id: string) {
   try {
     const reg = await db.query.registrations.findFirst({
