@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getRegistrationById } from "@/app/actions";
+import { COURSE_FEE } from "@/lib/constants";
 import { PrintButton } from "@/components/print-button";
 
 export const metadata = {
@@ -82,7 +83,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
                     Attendee: {registration.fullName} | Camera: {registration.cameraType} | Level: {registration.experienceLevel}
                   </p>
                 </td>
-                <td className="py-4 text-right font-semibold">GHS 200.00</td>
+                <td className="py-4 text-right font-semibold">GHS {COURSE_FEE.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
@@ -93,7 +94,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
           <div className="w-64">
             <div className="flex justify-between py-2 border-b border-gray-100">
               <span className="text-gray-500">Subtotal</span>
-              <span className="font-semibold">GHS 200.00</span>
+              <span className="font-semibold">GHS {COURSE_FEE.toFixed(2)}</span>
             </div>
             <div className="flex justify-between py-2 border-b border-gray-100">
               <span className="text-gray-500">Amount Paid</span>
@@ -102,7 +103,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
             <div className="flex justify-between py-3">
               <span className="font-bold text-lg">Balance Due</span>
               <span className="font-bold text-lg">
-                GHS {Math.max(0, 200 - (registration.amountPaid || 0)).toFixed(2)}
+                GHS {Math.max(0, COURSE_FEE - (registration.amountPaid || 0)).toFixed(2)}
               </span>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { registrations } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { COURSE_FEE } from "@/lib/constants";
 
 interface RegistrationData {
   fullName: string;
@@ -37,7 +38,7 @@ export async function createRegistration(data: RegistrationData) {
         goal: data.goal,
       }).where(eq(registrations.id, existing.id));
 
-      const remainingAmount = 200 - (existing.amountPaid || 0);
+      const remainingAmount = COURSE_FEE - (existing.amountPaid || 0);
       return { 
         success: true, 
         registrationId: existing.id,
@@ -73,8 +74,12 @@ export async function verifyPaymentAndConfirm(reference: string, registrationId:
         where: eq(registrations.id, registrationId),
       });
 
+      if (currentReg?.paystackReference === reference) {
+        return { success: true }; // Already processed this exact transaction
+      }
+
       const newTotal = (currentReg?.amountPaid || 0) + amountPaidGhs;
-      const isFullPayment = newTotal >= 200;
+      const isFullPayment = newTotal >= COURSE_FEE;
 
       await db.update(registrations)
         .set({
@@ -171,7 +176,7 @@ export async function syncPaymentStatus(registrationId: string, email: string) {
 
     if (successfulTransaction) {
       const amountPaidGhs = successfulTransaction.amount / 100;
-      const isFullPayment = amountPaidGhs >= 200;
+      const isFullPayment = amountPaidGhs >= COURSE_FEE;
 
       await db.update(registrations)
         .set({

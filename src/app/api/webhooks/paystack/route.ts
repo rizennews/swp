@@ -3,62 +3,68 @@ import crypto from "crypto";
 import { db } from "@/db";
 import { registrations } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { COURSE_FEE } from "@/lib/constants";
 
 export async function POST(req: Request) {
   try {
-    // 1. Get raw body for signature verification
-    const text = await req.text();
+    const rawBody = await req.text();
     const signature = req.headers.get("x-paystack-signature");
 
     if (!signature) {
-      return NextResponse.json({ error: "No signature found" }, { status: 400 });
+      return NextResponse.json({ error: "No signature" }, { status: 400 });
     }
 
-    // 2. Verify signature
     const hash = crypto
-      .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY as string)
-      .update(text)
+      .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY!)
+      .update(rawBody)
       .digest("hex");
 
     if (hash !== signature) {
-      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
-    // 3. Parse JSON
-    const body = JSON.parse(text);
-    const event = body.event;
+    const event = JSON.parse(rawBody);
 
-    // 4. Handle "charge.success"
-    if (event === "charge.success") {
-      const reference = body.data.reference;
-      const amountPaidGhs = body.data.amount / 100;
+    if (event.event === "charge.success") {
+      const data = event.data;
+      const reference = data.reference;
+      const amountPaidGhs = data.amount / 100;
       
-      // Extract registration ID from custom_fields
-      const metadata = body.data.metadata;
-      const metaRegId = metadata?.custom_fields?.find(
+      const metaRegId = data.metadata?.custom_fields?.find(
         (f: any) => f.variable_name === "registration_id"
       )?.value;
 
       if (!metaRegId) {
-         // If no registration ID is found, we might try to look up by email as a fallback
-         // But the proper flow uses metadata. We'll ignore if we can't link it.
          return NextResponse.json({ received: true, note: "No registration_id found in metadata" });
       }
 
-      const isFullPayment = amountPaidGhs >= 200;
+      const currentReg = await db.query.registrations.findFirst({
+        where: eq(registrations.id, metaRegId),
+      });
+
+      if (!currentReg) {
+         return NextResponse.json({ received: true, note: "Registration not found" });
+      }
+
+      if (currentReg.paystackReference === reference) {
+         return NextResponse.json({ received: true, note: "Already processed this transaction" });
+      }
+
+      const newTotal = (currentReg.amountPaid || 0) + amountPaidGhs;
+      const isFullPayment = newTotal >= COURSE_FEE;
 
       await db.update(registrations)
         .set({
           paymentStatus: isFullPayment ? "paid" : "partial",
           paystackReference: reference,
-          amountPaid: amountPaidGhs,
+          amountPaid: newTotal,
         })
         .where(eq(registrations.id, metaRegId));
     }
 
     return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error("Webhook error:", error);
-    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
+  } catch (err) {
+    console.error("Paystack Webhook Error:", err);
+    return NextResponse.json({ error: "Webhook Error" }, { status: 500 });
   }
 }
