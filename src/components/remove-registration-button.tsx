@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { rejectAndRefundRegistration, deleteRegistration } from "@/app/actions";
-import { Loader2, Trash2 } from "lucide-react";
+import { refundRegistration, deleteRegistration } from "@/app/actions";
+import { Loader2, Settings2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -20,19 +20,19 @@ export function RemoveRegistrationButton({ id }: { id: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleRefundAndDelete = async () => {
+  const handleRefund = async () => {
     setIsLoading(true);
-    const result = await rejectAndRefundRegistration(id);
+    const result = await refundRegistration(id);
     
     if (!result.success) {
-      alert(result.error || "Failed to remove and refund.");
+      alert(result.error || "Failed to refund.");
       setIsLoading(false);
     } else {
       setIsOpen(false);
     }
   };
 
-  const handleDeleteOnly = async () => {
+  const handleDelete = async () => {
     setIsDeleting(true);
     const result = await deleteRegistration(id);
     
@@ -49,19 +49,19 @@ export function RemoveRegistrationButton({ id }: { id: string }) {
       <DialogTrigger
         render={
           <button
-            title="Reject & Remove"
-            className="p-1.5 text-[#8b8b9e] hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+            title="Manage Registration"
+            className="p-1.5 text-[#8b8b9e] hover:text-white hover:bg-white/10 rounded-md transition-colors"
           />
         }
       >
-        <Trash2 className="w-4 h-4" />
+        <Settings2 className="w-4 h-4" />
       </DialogTrigger>
       
       <DialogContent className="bg-[#13131e] border-[#1e1e2e] pb-6">
         <DialogHeader>
-          <DialogTitle className="text-white">Reject Registration</DialogTitle>
+          <DialogTitle className="text-white">Manage Registration</DialogTitle>
           <DialogDescription className="text-[#8b8b9e]">
-            Choose an action below. You can either issue a full refund via Paystack and delete the user, or just delete the user's record from the database without refunding.
+            Choose an action below. You can issue a refund (which leaves the user in your database as "Refunded"), or you can permanently delete their record.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="border-none bg-transparent sm:justify-end gap-3 pt-6 pb-2 m-0">
@@ -77,20 +77,20 @@ export function RemoveRegistrationButton({ id }: { id: string }) {
             Cancel
           </DialogClose>
           <Button
-            onClick={handleDeleteOnly}
+            onClick={handleDelete}
+            disabled={isLoading || isDeleting}
+            className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20"
+          >
+            {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Delete Record
+          </Button>
+          <Button
+            onClick={handleRefund}
             disabled={isLoading || isDeleting}
             className="bg-zinc-800 hover:bg-zinc-700 text-white border-none"
           >
-            {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Just Delete
-          </Button>
-          <Button
-            onClick={handleRefundAndDelete}
-            disabled={isLoading || isDeleting}
-            className="bg-red-500 hover:bg-red-600 text-white border-none"
-          >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Refund & Delete
+            Issue Refund
           </Button>
         </DialogFooter>
       </DialogContent>

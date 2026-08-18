@@ -105,13 +105,14 @@ export async function getRegistrationById(id: string) {
   });
 }
 
-export async function rejectAndRefundRegistration(id: string) {
+export async function refundRegistration(id: string) {
   try {
     const reg = await db.query.registrations.findFirst({
       where: eq(registrations.id, id),
     });
 
     if (!reg) return { success: false, error: "Registration not found." };
+    if (reg.paymentStatus === "refunded") return { success: false, error: "Already refunded." };
 
     if (reg.paystackReference && reg.paymentStatus !== "pending") {
       const refundRes = await fetch("https://api.paystack.co/refund", {
@@ -132,7 +133,7 @@ export async function rejectAndRefundRegistration(id: string) {
       }
     }
 
-    await db.delete(registrations).where(eq(registrations.id, id));
+    await db.update(registrations).set({ paymentStatus: "refunded", amountPaid: 0 }).where(eq(registrations.id, id));
     revalidatePath("/admin");
     
     return { success: true };
