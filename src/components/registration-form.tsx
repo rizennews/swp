@@ -105,8 +105,9 @@ export default function RegistrationForm() {
           else { setError(v.error ?? "Verification failed."); setStep("form"); setIsLoading(false); }
         },
       }).openIframe();
-    } catch {
-      setError("Something went wrong. Try again.");
+    } catch (err: any) {
+      console.error("Registration caught error:", err);
+      setError(err?.message || "Something went wrong. Try again.");
       setStep("form"); setIsLoading(false);
     }
   };
