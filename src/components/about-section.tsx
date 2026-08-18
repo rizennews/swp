@@ -36,138 +36,90 @@ const pillars = [
 export default function AboutSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Track scroll progress for desktop animation
+  // Track scroll progress for the 400vh container
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  const y1 = useTransform(scrollYProgress, [0.1, 0.35], ["150vh", "0vh"]);
-  const y2 = useTransform(scrollYProgress, [0.35, 0.6], ["150vh", "0vh"]);
-  const y3 = useTransform(scrollYProgress, [0.6, 0.85], ["150vh", "0vh"]);
+  // Calculate slide-up animations for each card based on scroll progress
+  // By making ALL 4 cards slide up from offscreen, they never overlap with the intro text!
+  const y0 = useTransform(scrollYProgress, [0.1, 0.25], ["150vh", "0vh"]);
+  const y1 = useTransform(scrollYProgress, [0.3, 0.45], ["150vh", "0vh"]);
+  const y2 = useTransform(scrollYProgress, [0.5, 0.65], ["150vh", "0vh"]);
+  const y3 = useTransform(scrollYProgress, [0.7, 0.85], ["150vh", "0vh"]);
 
-  const ys = ["0vh", y1, y2, y3];
+  const ys = [y0, y1, y2, y3];
 
   return (
-    <section id="about" className="bg-[#0d0d14] relative z-0">
+    <section id="about" ref={containerRef} className="bg-[#0d0d14] relative z-0" style={{ height: "400vh" }}>
       
       {/* 
-        === MOBILE LAYOUT ===
-        On small screens, a 400vh scroll animation overlaps the text because h-screen is too short.
-        We simply stack the text and cards normally here. 
+        This sticky wrapper pins to the screen for the entire 400vh scroll.
+        Using 100svh prevents issues with mobile browser address bars.
       */}
-      <div className="md:hidden py-24 px-6 flex flex-col gap-16">
-        <div className="text-center flex flex-col gap-6">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
+        
+        {/* Intro text - Absolutely centered so it doesn't push cards down */}
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl px-6 text-center z-10 flex flex-col gap-4 md:gap-6"
+          style={{ opacity: useTransform(scrollYProgress, [0, 0.05], [1, 0]) }}
+        >
           <h2
-            className="text-[32px] font-bold text-white leading-tight"
+            className="text-[32px] md:text-[42px] font-bold text-white leading-tight"
             style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
           >
             Most photographers plateau because no one shows them the right things.
           </h2>
           <p 
-            className="text-[#8b8b9e] text-lg leading-relaxed"
+            className="text-[#8b8b9e] text-lg md:text-xl leading-relaxed"
             style={{ fontFamily: "'Satoshi', sans-serif" }}
           >
             This masterclass fixes that. We’ve distilled years of professional experience into three intensive days. No fluff, just the exact techniques, mindset, and business strategies you need to elevate your craft and start shooting with true purpose.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col gap-6">
-          {pillars.map((p) => (
-            <div 
+        {/* The Cards Stack - Absolutely centered */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl px-4 flex items-center justify-center h-[500px]">
+          {pillars.map((p, i) => (
+            <motion.div
               key={p.fig}
-              className="w-full p-8 bg-[#111118] border border-[#2e2e3e] rounded-xl"
+              className="absolute w-full px-4 md:px-8"
+              style={{
+                y: ys[i],
+                zIndex: i,
+              }}
             >
-              <div
-                className="w-12 h-12 bg-[#1a1a24] border border-[#2e2e3e] text-white flex items-center justify-center rounded-full font-bold text-xl mb-6"
-                style={{ fontFamily: "'Clash Display', sans-serif" }}
+              {/* The Physical Card */}
+              <div 
+                className="w-full p-8 md:p-12 bg-[#111118] border border-[#2e2e3e] rounded-xl transition-transform duration-500 ease-out shadow-2xl"
+                style={{ transform: `rotate(${p.rotation}deg)` }}
               >
-                {p.fig}
+                {/* Number circle */}
+                <div
+                  className="w-12 h-12 md:w-16 md:h-16 bg-[#1a1a24] border border-[#2e2e3e] text-white flex items-center justify-center rounded-full font-bold text-xl md:text-2xl mb-6"
+                  style={{ fontFamily: "'Clash Display', sans-serif" }}
+                >
+                  {p.fig}
+                </div>
+                
+                <h3
+                  className="text-2xl md:text-3xl text-white font-black mb-4 md:mb-6"
+                  style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
+                >
+                  {p.title}
+                </h3>
+                
+                <hr className="border-[#2e2e3e] mb-4 md:mb-6" />
+                
+                <p className="text-[#8b8b9e] text-base md:text-lg leading-relaxed font-medium">
+                  {p.description}
+                </p>
               </div>
-              <h3
-                className="text-2xl text-white font-black mb-4"
-                style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
-              >
-                {p.title}
-              </h3>
-              <hr className="border-[#2e2e3e] mb-4" />
-              <p className="text-[#8b8b9e] text-base leading-relaxed font-medium">
-                {p.description}
-              </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-
-      {/* 
-        === DESKTOP LAYOUT ===
-        The full 400vh sticky scroll animation.
-      */}
-      <div ref={containerRef} className="hidden md:block" style={{ height: "400vh" }}>
-        <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-          
-          {/* Intro text */}
-          <motion.div 
-            className="w-full max-w-3xl px-8 text-center z-10 flex flex-col gap-6 mb-12"
-            style={{ opacity: useTransform(scrollYProgress, [0, 0.05], [1, 0]) }}
-          >
-            <h2
-              className="text-[42px] font-bold text-white leading-tight"
-              style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
-            >
-              Most photographers plateau because no one shows them the right things.
-            </h2>
-            <p 
-              className="text-[#8b8b9e] text-xl leading-relaxed"
-              style={{ fontFamily: "'Satoshi', sans-serif" }}
-            >
-              This masterclass fixes that. We’ve distilled years of professional experience into three intensive days. No fluff, just the exact techniques, mindset, and business strategies you need to elevate your craft and start shooting with true purpose.
-            </p>
-          </motion.div>
-
-          {/* The Cards Stack */}
-          <div className="relative w-full max-w-2xl mx-auto flex items-center justify-center h-[500px]">
-            {pillars.map((p, i) => (
-              <motion.div
-                key={p.fig}
-                className="absolute w-full px-8"
-                style={{
-                  y: ys[i],
-                  zIndex: i,
-                }}
-              >
-                {/* The Physical Card */}
-                <div 
-                  className="w-full p-12 bg-[#111118] border border-[#2e2e3e] rounded-xl transition-transform duration-500 ease-out"
-                  style={{ transform: `rotate(${p.rotation}deg)` }}
-                >
-                  {/* Number circle */}
-                  <div
-                    className="w-16 h-16 bg-[#1a1a24] border border-[#2e2e3e] text-white flex items-center justify-center rounded-full font-bold text-2xl mb-6"
-                    style={{ fontFamily: "'Clash Display', sans-serif" }}
-                  >
-                    {p.fig}
-                  </div>
-                  
-                  <h3
-                    className="text-3xl text-white font-black mb-6"
-                    style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
-                  >
-                    {p.title}
-                  </h3>
-                  
-                  <hr className="border-[#2e2e3e] mb-6" />
-                  
-                  <p className="text-[#8b8b9e] text-lg leading-relaxed font-medium">
-                    {p.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-
     </section>
   );
 }
