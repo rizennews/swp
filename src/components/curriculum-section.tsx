@@ -8,10 +8,10 @@ const days = [
     title: "Foundation & Field Session",
     date: "August 21, 2025",
     topics: [
-      "Exposure triangle & reading natural light",
-      "Composition rules and when to break them",
-      "Field session: Street photography in Accra",
-      "Approaching subjects & framing stories",
+      "Camera basics & manual mode",
+      "Lighting for portraits & products",
+      "Compositions & storytelling",
+      "Field session & hands-on practice",
     ],
   },
   {
@@ -19,8 +19,8 @@ const days = [
     title: "Post-Processing & Portfolio",
     date: "August 22, 2025",
     topics: [
-      "Lightroom editing workflow from scratch",
-      "Colour grading and developing a personal style",
+      "Editing & workflow from scratch",
+      "Developing a personal style",
       "Building a cohesive photography portfolio",
       "Group critique and certificates",
     ],

@@ -32,7 +32,7 @@ export default function HeroSection() {
 
           {/* Subtitle */}
           <motion.p variants={item} className="text-[#8b8b9e] text-base leading-relaxed max-w-xl mb-8">
-            In 2 days, you&apos;ll go from unsure to unstoppable. Learn light, composition, and storytelling
+            In 2 days, you&apos;ll go from unsure to unstoppable. Learn manual mode, lighting, composition, and editing
             from photographers who have shot across Africa and beyond.{" "}
             <span className="text-white">GHS 200. One time. No fluff.</span>
           </motion.p>
