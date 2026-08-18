@@ -25,6 +25,7 @@ export default async function SuccessPage({ searchParams }: Props) {
       where: ilike(registrations.fullName, name),
       orderBy: [desc(registrations.createdAt)],
     });
+    if (recentReg) {
       actualId = recentReg.id;
     }
   }
