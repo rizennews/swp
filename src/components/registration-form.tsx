@@ -97,12 +97,14 @@ export default function RegistrationForm() {
         currency: "GHS",
         ref,
         metadata: { custom_fields: [{ display_name: "Name", variable_name: "full_name", value: form.fullName }] },
-        onClose: () => { setStep("form"); setError("Payment cancelled. Your details are saved — try again."); },
-        callback: async (response) => {
-          setStep("verifying"); setIsLoading(true);
-          const v = await verifyPaymentAndConfirm(response.reference, result.registrationId!);
-          if (v.success) { router.push(`/success?name=${encodeURIComponent(form.fullName)}`); }
-          else { setError(v.error ?? "Verification failed."); setStep("form"); setIsLoading(false); }
+        onClose: function() { setStep("form"); setError("Payment cancelled. Your details are saved — try again."); },
+        callback: function(response: any) {
+          (async () => {
+            setStep("verifying"); setIsLoading(true);
+            const v = await verifyPaymentAndConfirm(response.reference, result.registrationId!);
+            if (v.success) { router.push(`/success?name=${encodeURIComponent(form.fullName)}`); }
+            else { setError(v.error ?? "Verification failed."); setStep("form"); setIsLoading(false); }
+          })();
         },
       }).openIframe();
     } catch (err: any) {
