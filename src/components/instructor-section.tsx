@@ -13,10 +13,10 @@ function InstagramIcon({ className }: { className?: string }) {
 }
 
 const instructors = [
-  { id: 1, name: "Stardom", role: "Host", instagram: "@stardom", instagramUrl: "https://instagram.com/stardom", image: "/instructors/instructor-1.jpg" },
-  { id: 2, name: "Drill", role: "Host", instagram: "@drill", instagramUrl: "https://instagram.com/drill", image: "/instructors/instructor-2.jpg" },
-  { id: 3, name: "Guest Instructor", role: "Guest Facilitator", instagram: "@guest", instagramUrl: "https://instagram.com/guest", image: "/instructors/instructor-3.jpg" },
-  { id: 4, name: "Guest Instructor", role: "Guest Facilitator", instagram: "@guest", instagramUrl: "https://instagram.com/guest", image: "/instructors/instructor-4.jpg" },
+  { id: 1, name: "Stardom", role: "Host", instagram: "@stardom", instagramUrl: "https://instagram.com/stardom", image: "/instructors/Stardom Photos.jpeg" },
+  { id: 2, name: "Drill", role: "Host", instagram: "@drill", instagramUrl: "https://instagram.com/drill", image: "/instructors/Drill Visus.jpeg" },
+  { id: 3, name: "Kirk Studios", role: "Guest Facilitator", instagram: "@kirkstudios", instagramUrl: "https://instagram.com/kirkstudios", image: "/instructors/Kirk Studios.jpeg" },
+  { id: 4, name: "Serwah Photography", role: "Guest Facilitator", instagram: "@serwahphotography", instagramUrl: "https://instagram.com/serwahphotography", image: "/instructors/Serwah Photography.jpeg" },
 ];
 
 function InstructorCard({ instructor, index }: { instructor: typeof instructors[0]; index: number }) {
