@@ -20,6 +20,7 @@ export const auth = betterAuth({
   plugins: [admin()],
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,
+  trustHost: true,
 });
 
 export type Session = typeof auth.$Infer.Session;
