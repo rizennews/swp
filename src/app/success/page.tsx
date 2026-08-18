@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Calendar, MapPin, ArrowRight } from "lucide-react";
+import { CheckCircle2, Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Registration Confirmed — Shoot With Purpose",
@@ -38,14 +38,21 @@ export default async function SuccessPage({ searchParams }: Props) {
             <Calendar className="w-4 h-4 text-amber-500 flex-shrink-0" />
             <div>
               <p className="text-xs text-zinc-500 uppercase tracking-wider mb-0.5">Date</p>
-              <p className="text-white font-semibold text-sm">To Be Announced (TBA)</p>
+              <p className="text-white font-semibold text-sm">August 21 — 22, 2025</p>
+            </div>
+          </div>
+          <div className="p-5 flex items-center gap-3">
+            <Clock className="w-4 h-4 text-amber-500 flex-shrink-0" />
+            <div>
+              <p className="text-xs text-zinc-500 uppercase tracking-wider mb-0.5">Time</p>
+              <p className="text-white font-semibold text-sm">9:00 AM — 5:00 PM daily</p>
             </div>
           </div>
           <div className="p-5 flex items-center gap-3">
             <MapPin className="w-4 h-4 text-amber-500 flex-shrink-0" />
             <div>
               <p className="text-xs text-zinc-500 uppercase tracking-wider mb-0.5">Location</p>
-              <p className="text-white font-semibold text-sm">Accra, Ghana — venue details will be emailed to you</p>
+              <p className="text-white font-semibold text-sm">Accra, Ghana (venue TBA)</p>
             </div>
           </div>
         </div>
