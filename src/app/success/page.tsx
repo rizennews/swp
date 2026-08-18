@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
 import { db } from "@/db";
 import { registrations } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, ilike } from "drizzle-orm";
 
 export const metadata = {
   title: "Registration Confirmed — Shoot With Purpose",
@@ -22,10 +22,9 @@ export default async function SuccessPage({ searchParams }: Props) {
   // Fallback: If ID is not in the URL, try to find their most recent registration by name
   if (!actualId && name) {
     const recentReg = await db.query.registrations.findFirst({
-      where: eq(registrations.fullName, name),
+      where: ilike(registrations.fullName, name),
       orderBy: [desc(registrations.createdAt)],
     });
-    if (recentReg) {
       actualId = recentReg.id;
     }
   }
