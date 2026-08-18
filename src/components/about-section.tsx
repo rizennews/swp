@@ -41,86 +41,79 @@ export default function AboutSection() {
     offset: ["start start", "end end"],
   });
 
-  // The text starts in the center, and slides UP out of the screen as you begin scrolling
-  const textY = useTransform(scrollYProgress, [0, 0.15], ["0vh", "-100vh"]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
+  // Original perfectly-timed slide animations
+  const y1 = useTransform(scrollYProgress, [0.1, 0.35], ["150vh", "0vh"]);
+  const y2 = useTransform(scrollYProgress, [0.35, 0.6], ["150vh", "0vh"]);
+  const y3 = useTransform(scrollYProgress, [0.6, 0.85], ["150vh", "0vh"]);
 
-  // ALL cards now slide up from the bottom of the screen to the center
-  // Card 1 comes up right after the text leaves
-  const y0 = useTransform(scrollYProgress, [0.05, 0.25], ["100vh", "0vh"]);
-  const y1 = useTransform(scrollYProgress, [0.25, 0.45], ["100vh", "0vh"]);
-  const y2 = useTransform(scrollYProgress, [0.5, 0.65], ["100vh", "0vh"]);
-  const y3 = useTransform(scrollYProgress, [0.7, 0.85], ["100vh", "0vh"]);
-
-  const ys = [y0, y1, y2, y3];
+  // First card sits statically at 0vh
+  const ys = ["0vh", y1, y2, y3];
 
   return (
     <section id="about" ref={containerRef} className="bg-[#0d0d14] relative z-0" style={{ height: "400vh" }}>
       
-      {/* Viewport container */}
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
+      {/* 
+        Original sticky wrapper.
+        Uses flex-col to keep the text and cards perfectly stacked together with NO massive gaps.
+      */}
+      <div className="sticky top-0 h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden pt-12 md:pt-0">
         
         {/* 
-          INTRO TEXT
-          Absolutely centered so it doesn't take up any layout space.
-          It slides up and fades out before the cards even arrive.
+          INTRO TEXT 
+          Responsive sizing ensures it doesn't take up too much vertical space on mobile.
         */}
-        <motion.div 
-          className="absolute top-[15%] md:top-[20%] left-1/2 -translate-x-1/2 w-full max-w-3xl px-6 text-center z-10 flex flex-col gap-6"
-          style={{ y: textY, opacity: textOpacity }}
-        >
+        <div className="w-full max-w-3xl px-6 md:px-8 text-center z-10 flex flex-col gap-3 md:gap-6 mb-6 md:mb-12">
           <h2
-            className="text-[32px] md:text-[42px] font-bold text-white leading-tight"
+            className="text-[26px] md:text-[42px] font-bold text-white leading-tight"
             style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
           >
             Most photographers plateau because no one shows them the right things.
           </h2>
           <p 
-            className="text-[#8b8b9e] text-lg md:text-xl leading-relaxed"
+            className="text-[#8b8b9e] text-sm md:text-xl leading-relaxed"
             style={{ fontFamily: "'Satoshi', sans-serif" }}
           >
             This masterclass fixes that. We’ve distilled years of professional experience into three intensive days. No fluff, just the exact techniques, mindset, and business strategies you need to elevate your craft and start shooting with true purpose.
           </p>
-        </motion.div>
+        </div>
 
         {/* 
           CARDS STACK
-          Absolutely centered. Because the text is also absolutely centered,
-          they don't squish each other or fight for flexbox space.
-          The text leaves, then the cards slide in.
+          Height is tightly controlled (380px on mobile, 500px on desktop)
+          so that it fits underneath the text within 100svh perfectly.
         */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl px-4 flex items-center justify-center">
+        <div className="relative w-full max-w-2xl mx-auto flex items-center justify-center h-[380px] md:h-[500px]">
           {pillars.map((p, i) => (
             <motion.div
               key={p.fig}
-              className="absolute w-full px-2 md:px-8"
+              className="absolute w-full px-4 md:px-8"
               style={{
                 y: ys[i],
                 zIndex: i,
               }}
             >
-              {/* The Physical Card - Removed shadow/glow */}
+              {/* The Physical Card */}
               <div 
                 className="w-full p-8 md:p-12 bg-[#111118] border border-[#2e2e3e] rounded-xl transition-transform duration-500 ease-out"
                 style={{ transform: `rotate(${p.rotation}deg)` }}
               >
                 <div
-                  className="w-12 h-12 md:w-16 md:h-16 bg-[#1a1a24] border border-[#2e2e3e] text-white flex items-center justify-center rounded-full font-bold text-xl md:text-2xl mb-6"
+                  className="w-10 h-10 md:w-16 md:h-16 bg-[#1a1a24] border border-[#2e2e3e] text-white flex items-center justify-center rounded-full font-bold text-lg md:text-2xl mb-4 md:mb-6"
                   style={{ fontFamily: "'Clash Display', sans-serif" }}
                 >
                   {p.fig}
                 </div>
                 
                 <h3
-                  className="text-2xl md:text-3xl text-white font-black mb-4 md:mb-6"
+                  className="text-xl md:text-3xl text-white font-black mb-3 md:mb-6"
                   style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: "-0.02em" }}
                 >
                   {p.title}
                 </h3>
                 
-                <hr className="border-[#2e2e3e] mb-4 md:mb-6" />
+                <hr className="border-[#2e2e3e] mb-3 md:mb-6" />
                 
-                <p className="text-[#8b8b9e] text-base md:text-lg leading-relaxed font-medium">
+                <p className="text-[#8b8b9e] text-sm md:text-lg leading-relaxed font-medium">
                   {p.description}
                 </p>
               </div>
